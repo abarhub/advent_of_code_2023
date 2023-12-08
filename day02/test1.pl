@@ -38,4 +38,57 @@ parcourt2(A,[cube(X,green)|T],B,R,G) :-
 test2(A,B,R,G) :- 
 	test1(game(A,_),B,R,G).
 
+calcul(A) :-
+		game(A,L),
+		somme(L,B,R,G),
+		R =< 12,
+		G =< 13,
+		B =< 14,
+		write('Le jeux '), write(A), write(' a : '),
+		write(B), write(' bleu, '),
+		write(R), write(' rouge, '),
+		write(G), write(' vert'), nl.
+
+somme([],B,R,G) :- 
+		B is 0,
+		R is 0,
+		G is 0.
+		
+somme([H|T],B,R,G) :- 
+		somme2(H,B1,R1,G1),
+		somme(T,B2,R2,G2), 
+		B is B1 + B2,
+		R is R1 + R2,
+		G is G1 + G2.
+		
+
+somme2([],B,R,G) :- 
+		B is 0,
+		R is 0,
+		G is 0.
+		
+somme2([cube(X,blue)|T],B,R,G) :- 
+		somme2(T,B1,R,G),
+		B is X + B1.
+		
+
+somme2([cube(X,red)|T],B,R,G) :- 
+		somme2(T,B,R1,G),
+		R is X + R1.
+		
+	
+somme2([cube(X,green)|T],B,R,G) :- 
+		somme2(T,B,R,G1),
+		G is X + G1.
+		
+		
+calcul2(N) :- 
+		findall(A, calcul(A), R),
+		somme3(R,N).
+		
+		
+somme3([],R) :- R is 0.
+somme3([H|T],R) :- 
+		somme3(T,R2),
+		R is H + R2.
 
