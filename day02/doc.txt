@@ -49,4 +49,35 @@ parcourt2(A,[cube(X,green)|T],B,R,G) :-
 	G is G + X,
 	parcourt(A,T,B,R,G).
 
+https://stackoverflow.com/questions/4805601/read-a-file-line-by-line-in-prolog
+
+:- use_module(library(pio)).
+
+lines([])           --> call(eos), !.
+lines([Line|Lines]) --> line(Line), lines(Lines).
+
+eos([], []).
+
+line([])     --> ( "\n" ; call(eos) ), !.
+line([L|Ls]) --> [L], line(Ls).
+
+?- phrase_from_file(lines(Ls), 'your_file.txt').
+
+
+phrase_from_file(lines(Ls), 'test1.txt').
+
+
+match_count('test2.pl', `file`, Count).
+
+match_count('test0.txt', `file`, Count).
+
+
+https://stackoverflow.com/questions/49590129/how-to-find-phrase-in-file-prolog
+
+
+set_portray_text(enabled, true).
+
+https://www.amzi.com/manuals/amzi/pro/ref_dcg.htm
+
+https://www.metalevel.at/prolog/dcg
 
