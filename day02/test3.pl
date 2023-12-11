@@ -61,6 +61,12 @@ line([L|Ls]) --> [L], line(Ls) .
 affiche([]) :- nl .
 affiche([H|T]) :- write(H), affiche(T).
 
+my_read_file(File,List):-
+    open(File, read, Stream),
+    read_line(Stream, List),
+    close(Stream).
+
+
 /*
 match([H|T]) -->  "game" , "(" , listeCube , ")" .
 		
@@ -74,6 +80,18 @@ listeCube3() -->  cube "," listeCube3 .
 cube() -->  cube .
 
 */
+
+
+stream_lines0(File,Lines) :-
+	open(File, read, Input),
+	stream_lines(Input,Lines),
+	close(Input).
+	
+
+stream_lines(In, Lines) :-
+    read_string(In, _, Str),
+    split_string(Str, "\n", "\n", Lines).
+
 
 
 
@@ -120,7 +138,7 @@ cubeliste(Bleu, Vert, Rouge) --> cube1(Bleu1, Vert1, Rouge1), ",", cubeliste(Ble
 
 
 analyse2([]) :- write('fin'), nl.
-analyse2([H|T]) :- write('debut'),write(H),phrase(pgame2(S), H), 
+analyse2([H|T]) :- write('debut'),write(H),write('debut2'),phrase(pgame2(S), H), 
 		write('Le jeux '), /*write(N), write(' a : '),
 		write(B), write(' bleu, '),
 		write(R), write(' rouge, '),
@@ -128,7 +146,9 @@ analyse2([H|T]) :- write('debut'),write(H),phrase(pgame2(S), H),
 		analyse2(T).
 		
 
-analyse3([H|T]) :- write('debut'),write(H),phrase(pgame2(S), H), 
+analyse3([H|T]) :- write('debut'),write(H),
+		string_to_list(H,H2),
+		phrase(pgame2(S), H2), 
 		write('Le jeux '), /*write(N), write(' a : '),
 		write(B), write(' bleu, '),
 		write(R), write(' rouge, '),
@@ -140,6 +160,14 @@ analyseFichier(Ls) :-
 	write('liste:'),write(Ls),
 	analyse3(Ls)
 	.
+
+
+analyseFichier2(Ls,File) :-
+	stream_lines0(File,Ls),
+	write('liste:'),write(Ls),
+	analyse3(Ls)
+	.
+
 
 /*
 
