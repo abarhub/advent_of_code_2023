@@ -63,3 +63,4 @@ res=solve1('test_advent_of_code_2023_day2_part1.txt')
 
 print("res="+str(res))
 
+# solution : 66027
