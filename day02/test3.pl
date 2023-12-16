@@ -119,13 +119,17 @@ num3(D) --> [D], {number(D)}.
 
 pgame2(game2(N,Bleu, Vert, Rouge)) --> [ 'g','a','m','e','('] , num2(N),[','], liste1(Bleu, Vert, Rouge), [ ')' ] .
 
-liste1(Bleu, Vert, Rouge) --> 
-			"[", liste2(Bleu1, Vert1, Rouge1), ";", liste1(Bleu2, Vert2, Rouge2),  "]" , { Bleu is Bleu1 + Bleu2, Vert is Vert1 + Vert2 , Rouge is Rouge1 + Rouge2 } .
-liste1(Bleu, Vert, Rouge) --> "[", liste2(Bleu, Vert, Rouge),  "]".
+liste01(Bleu, Vert, Rouge) --> 
+			liste2(Bleu1, Vert1, Rouge1), ";", liste01(Bleu2, Vert2, Rouge2),  { Bleu is Bleu1 + Bleu2, Vert is Vert1 + Vert2 , Rouge is Rouge1 + Rouge2 } .
+
+
+liste1(Bleu, Vert, Rouge) --> "[", liste01(Bleu, Vert, Rouge),  "]".
 liste1(Bleu, Vert, Rouge) --> "[", "]", { Bleu is 0, Vert is 0 , Rouge is 0 }.
 
-liste2(Bleu, Vert, Rouge) --> "[", cubeliste(Bleu1, Vert1, Rouge1), ",", liste2(Bleu2, Vert2, Rouge2),  "]" , { Bleu is Bleu1 + Bleu2, Vert is Vert1 + Vert2 , Rouge is Rouge1 + Rouge2 } .
-liste2(Bleu, Vert, Rouge) --> "[", cubeliste(Bleu, Vert, Rouge), "]"  .
+liste02(Bleu, Vert, Rouge) --> cubeliste(Bleu1, Vert1, Rouge1), ",", liste02(Bleu2, Vert2, Rouge2),  { Bleu is Bleu1 + Bleu2, Vert is Vert1 + Vert2 , Rouge is Rouge1 + Rouge2 } .
+liste02(Bleu, Vert, Rouge) --> cubeliste(Bleu, Vert, Rouge)  .
+
+liste2(Bleu, Vert, Rouge) --> "[", liste02(Bleu, Vert, Rouge), "]"  .
 liste2(Bleu, Vert, Rouge) --> "[",   "]" , { Bleu is 0, Vert is 0 , Rouge is 0 }.
 
 
@@ -168,11 +172,23 @@ analyseFichier2(Ls,File) :-
 	analyse3(Ls)
 	.
 
+liste05 --> elt05, ",", liste05 .
+liste05 --> elt05 .
+
+elt05 --> "a".
+
+liste005 --> "[", liste05, "]" .
+liste005 --> "[",  "]" .
 
 /*
 
 phrase(pgame2(S), "game(1,[[cube(3,blue),cube(4,red)],[cube(1,red),cube(2,green),cube(6,blue)],[cube(2,green)]])").
 phrase(pgame2(S), [103,97,109,101,40,49,44,91,91,99,117,98,101,40,51,44,98,108,117,101,41,44,99,117,98,101,40,52,44,114,101,100,41,93,44,91,99,117,98,101,40,49,44,114,101,100,41,44,99,117,98,101,40,50,44,103,114,101,101,110,41,44,99,117,98,101,40,54,44,98,108,117,101,41,93,44,91,99,117,98,101,40,50,44,103,114,101,101,110,41,93,93,41]).
+
+phrase(liste05, "a,a,a,a").
+phrase(liste05, "a").
+
+phrase(liste005, "[a]").
 
 */
 
