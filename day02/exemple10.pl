@@ -81,17 +81,17 @@ stream_lines(In, Lines) :-
 parseLines([], []).
 
 parseLines([H|T], [R2|T2]) :- 
-				/*write('H:'),write(H),nl,*/
+				write('H:'),write(H),nl,
 				string_chars(H, H2),
-				/*write('H2:'),write(H2),nl,
-				write('T:'),write(T),nl,*/
+				write('H2:'),write(H2),nl,
+				write('T:'),write(T),nl,
 				phrase(parseGame(R2), H2), 
-				/*write('res:'),write(R2),nl,*/
+				write('res:'),write(R2),nl,
 				parseLines(T, T2).
 
 parseGame(game(N,List)) --> 
-				"Game ", num0(N),deux_point, " ", listeGames(List)  /*,*/ 
-				/*{write('game:'),write(N),write('liste:'),write(List),nl} */
+				"Game ", num0(N),deux_point, " ", listeGames(List)  , 
+				{write('game:'),write(N),write('liste:'),write(List),nl} 
 				.
 
 deux_point --> ":".
@@ -126,25 +126,32 @@ num2(N) --> num3(N).
 
 num0(N) --> num2(N).
 
-
-listeGames([X|L]) --> 
-			game0(X), 
-			separateur, 
+listeGames(L) --> listeGames0(L).
+			
+listeGames0([X|L]) --> 
+			listeGames1(X), 
+			"; ", 
 			/*{write('listeGames,'),write(X),nl}, */
-			listeGames(L).
-/*
-listeGames([X|L]) --> game0(X), "; ", {write('listeGames;'),nl}, listeGames(L).
-*/
-listeGames([X]) --> 
-			game0(X) /*, */
-			/*{write('listeGames game0 '),write(X), nl} */
-			.
-/*
-listeGames([]) --> [], {write('listeGames []'),nl}.
-*/
+			listeGames0(L).
+			
+listeGames0([X]) --> 
+			listeGames1(X).
 
-separateur --> ", ".
-separateur --> "; ".
+listeGames1([X|L]) --> 
+			listeGames3(X), 
+			", ", 
+			/*{write('listeGames,'),write(X),nl}, */
+			listeGames1(L).
+			
+listeGames1([X]) --> 
+			listeGames3(X).
+
+
+listeGames3(X) --> 
+			game0(X) 
+			.
+
+
 
 game0(bleu(N)) --> num0(N), " blue".
 game0(rouge(N)) --> num0(N), " red".
@@ -190,21 +197,72 @@ calculValeurJeux(N,R,G,B,V) :- R =< 12,
 		
 calculValeurJeux(_,_,_,_,0).
 
-calcul02(game(N,List), V) :-
-		somme(List,B,R,G),
+calcul02(game(N,List), V, N) :-
+		somme00(List,14,12,13,V),
 		/*R =< 12,
 		G =< 13,
 		B =< 14,*/
 		write('Le jeux '), write(N), write(' a : '),
-		write(B), write(' bleu, '),
+		/*write(B), write(' bleu, '),
 		write(R), write(' rouge, '),
-		write(G), write(' vert '), 
-		calculValeurJeux(N,R,G,B,V),
+		write(G), write(' vert '), */
+		/*calculValeurJeux(N,R,G,B,V),*/
 		write(V), write(' valeur'),nl
 		.
+	
+	
+calcul(L, N) :- 
+		calcul0(L,N),
+		write('N'),write(N),nl
+		.
+
+
+	
+calcul0([H|T], N) :- calcul02(H, N0, N2), calcul0(T, N1), N3 is (1-N0)*N2, N is N3+N1.
+calcul0([H], N) :- calcul02(H, N0, N2), N is (1-N0)*N2.
+
+
+somme00(L,BM,RM,GM,N) :-
+		somme01(L,BM,RM,GM,N).
+
+somme01([H|T],BM,RM,GM,N3) :-
+		somme02(H,B,R,G),
+		a_prendre(B,R,G,BM,RM,GM,N1),
+		write('jeu '),write(N),write('B'),write(B),write('R'),write(R),write('G'),write(G),write('N'),write(N),nl,
+		somme01(T,BM,RM,GM,N2),
+		N3 is max(N1,N2)
+		.
+
+
+somme01([H],BM,RM,GM,N2) :-
+		somme02(H,B,R,G),
+		a_prendre(B,R,G,BM,RM,GM,N2)
+		.
+
+a_prendre(A,B,C,A2,B2,C2, N) :-
+		A=<A2,
+		B=<B2,
+		C=<C2,
+		N is 0.
 		
-calcul([H|T], N) :- calcul02(H, N0), calcul(T, N1), N is N0 + N1.
-calcul([H], N) :- calcul02(H, N).
+		
+a_prendre(_,_,_,_,_,_, N) :-
+		N is 1.
+		
+		
+
+		
+somme02([H|T],B,R,G) :-
+		somme2(H,B1,R1,G1),
+		somme02(T,B2,R2,G2), 
+		B is B1 + B2,
+		R is R1 + R2,
+		G is G1 + G2
+		.
+		
+somme02([H],B,R,G) :-
+		somme2(H,B,R,G)
+		.		
 
 somme([],B,R,G) :- 
 		B is 0,
