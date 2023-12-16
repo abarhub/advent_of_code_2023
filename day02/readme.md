@@ -20,3 +20,4 @@ permet de tester le parseur
 - parse1('chemin_vers_le_fichier/test4.txt',R).
 permet de tester sur un jeux de donnée plus petit
 
+fait avec swi prolog en version 8.4.3
