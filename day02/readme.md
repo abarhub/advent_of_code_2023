@@ -26,3 +26,4 @@ fait avec swi prolog en version 8.4.3
 Le 2eme problème de la journée a été résolu avec le programme test3.py, et la solution est 66027.
 
 
+Le exemple11.pl le résou aussi.
